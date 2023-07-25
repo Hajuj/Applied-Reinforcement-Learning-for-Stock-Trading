@@ -6,6 +6,8 @@ Welcome to the repository for the practical course on Applied Reinforcement Lear
 
 The primary focus of our project is to develop an intelligent agent that leverages historical data to make informed decisions regarding stock trading. Specifically, our agent will predict whether to **sell**, **hold**, or **buy a particular stock** based on the analysis of the available data. To accomplish this, we plan to implement advanced RL algorithms such as **Advantage Actor-Critic** (A2C) and **Proximal Policy Optimization** (PPO).
 
+For more information on the project please visit our [**Wiki**](https://gitlab.lrz.de/team-1-ARL/automatic-stock-trading-applied-reinforcement-learning-sommer-term-2023/-/wikis/home)
+
 ## Datasets and APIs
 
 To facilitate our research and development process, we will utilize the following datasets and APIs:
