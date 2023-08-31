@@ -35,6 +35,7 @@ class StockTradingEnv(gym.Env):
         action_space: int,
         tech_indicator_list: list[str],
         sentiment_list: list[str],
+        price: list[float], #datenformat vom price anpassen falls nötig
         turbulence_threshold=None,
         risk_indicator_col="turbulence",
         make_plots: bool = False,
@@ -45,7 +46,11 @@ class StockTradingEnv(gym.Env):
         model_name="",
         mode="",
         iteration="",
+
+
+
     ):
+        self.price = self.data.close.values.tolist()
         self.day = day
         self.df = df
         self.stock_dim = stock_dim
@@ -74,6 +79,7 @@ class StockTradingEnv(gym.Env):
         self.model_name = model_name
         self.mode = mode
         self.iteration = iteration
+
         # initalize state
         self.state = self._initiate_state()
 
@@ -105,7 +111,7 @@ class StockTradingEnv(gym.Env):
         def _do_sell_normal():
             if (
                 self.state[index + 2 * self.stock_dim + 1] != True
-            ):  # check if the stock is able to sell, for simlicity we just add it in techical index
+            ):  # check if the stock is able to sell, for simplicity we just add it in technical index
                 # if self.state[index + 1] > 0: # if we use price<0 to denote a stock is unable to trade in that day, the total asset calculation may be wrong for the price is unreasonable
                 # Sell only if the price is > 0 (no missing data in this particular date)
                 # perform sell action based on the sign of the action
@@ -115,7 +121,7 @@ class StockTradingEnv(gym.Env):
                         abs(action), self.state[index + self.stock_dim + 1]
                     )
                     sell_amount = (
-                        self.state[index + 1]
+                        self.price[index]
                         * sell_num_shares
                         * (1 - self.sell_cost_pct[index])
                     )
@@ -124,7 +130,7 @@ class StockTradingEnv(gym.Env):
 
                     self.state[index + self.stock_dim + 1] -= sell_num_shares
                     self.cost += (
-                        self.state[index + 1]
+                        self.price[index]
                         * sell_num_shares
                         * self.sell_cost_pct[index]
                     )
@@ -139,14 +145,14 @@ class StockTradingEnv(gym.Env):
         # perform sell action based on the sign of the action
         if self.turbulence_threshold is not None:
             if self.turbulence >= self.turbulence_threshold:
-                if self.state[index + 1] > 0:
+                if self.price[index] > 0:
                     # Sell only if the price is > 0 (no missing data in this particular date)
                     # if turbulence goes over threshold, just clear out all positions
                     if self.state[index + self.stock_dim + 1] > 0:
                         # Sell only if current asset is > 0
                         sell_num_shares = self.state[index + self.stock_dim + 1]
                         sell_amount = (
-                            self.state[index + 1]
+                            self.price[index]
                             * sell_num_shares
                             * (1 - self.sell_cost_pct[index])
                         )
@@ -154,7 +160,7 @@ class StockTradingEnv(gym.Env):
                         self.state[0] += sell_amount
                         self.state[index + self.stock_dim + 1] = 0
                         self.cost += (
-                            self.state[index + 1]
+                            self.price[index]
                             * sell_num_shares
                             * self.sell_cost_pct[index]
                         )
@@ -178,14 +184,14 @@ class StockTradingEnv(gym.Env):
                 # if self.state[index + 1] >0:
                 # Buy only if the price is > 0 (no missing data in this particular date)
                 available_amount = self.state[0] // (
-                    self.state[index + 1] * (1 + self.buy_cost_pct[index])
+                    self.price[index] * (1 + self.buy_cost_pct[index])
                 )  # when buying stocks, we should consider the cost of trading when calculating available_amount, or we may be have cash<0
                 # print('available_amount:{}'.format(available_amount))
 
                 # update balance
                 buy_num_shares = min(available_amount, action)
                 buy_amount = (
-                    self.state[index + 1]
+                    self.price[index]
                     * buy_num_shares
                     * (1 + self.buy_cost_pct[index])
                 )
@@ -194,7 +200,7 @@ class StockTradingEnv(gym.Env):
                 self.state[index + self.stock_dim + 1] += buy_num_shares
 
                 self.cost += (
-                    self.state[index + 1] * buy_num_shares * self.buy_cost_pct[index]
+                    self.price[index] * buy_num_shares * self.buy_cost_pct[index]
                 )
                 self.trades += 1
             else:
@@ -226,14 +232,14 @@ class StockTradingEnv(gym.Env):
             if self.make_plots:
                 self._make_plot()
             end_total_asset = self.state[0] + sum(
-                np.array(self.state[1 : (self.stock_dim + 1)])
+                np.array(self.price)
                 * np.array(self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)])
             )
             df_total_value = pd.DataFrame(self.asset_memory)
             tot_reward = (
                 self.state[0]
                 + sum(
-                    np.array(self.state[1 : (self.stock_dim + 1)])
+                    np.array(self.price)
                     * np.array(
                         self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)]
                     )
@@ -310,7 +316,7 @@ class StockTradingEnv(gym.Env):
                 if self.turbulence >= self.turbulence_threshold:
                     actions = np.array([-self.hmax] * self.stock_dim)
             begin_total_asset = self.state[0] + sum(
-                np.array(self.state[1 : (self.stock_dim + 1)])
+                np.array(self.price)
                 * np.array(self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)])
             )
             # print("begin_total_asset:{}".format(begin_total_asset))
@@ -343,7 +349,7 @@ class StockTradingEnv(gym.Env):
             self.state = self._update_state()
 
             end_total_asset = self.state[0] + sum(
-                np.array(self.state[1 : (self.stock_dim + 1)])
+                np.array(self.price)
                 * np.array(self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)])
             )
             self.asset_memory.append(end_total_asset)
@@ -373,12 +379,12 @@ class StockTradingEnv(gym.Env):
                 self.initial_amount
                 + np.sum(
                     np.array(self.num_stock_shares)
-                    * np.array(self.state[1 : 1 + self.stock_dim])
+                    * np.array(self.price)
                 )
             ]
         else:
             previous_total_asset = self.previous_state[0] + sum(
-                np.array(self.state[1 : (self.stock_dim + 1)])
+                np.array(self.price)
                 * np.array(
                     self.previous_state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)]
                 )
@@ -408,7 +414,7 @@ class StockTradingEnv(gym.Env):
                 # for multiple stock
                 state = (
                     [self.initial_amount]
-                    + self.data.close.values.tolist()
+                    + self.data.change.values.tolist()
                     + self.num_stock_shares
                     + sum(
                         (
@@ -429,7 +435,7 @@ class StockTradingEnv(gym.Env):
                 # for single stock
                 state = (
                     [self.initial_amount]
-                    + [self.data.close]
+                    + [self.data.change]
                     + [0] * self.stock_dim
                     + sum(([self.data[tech]] for tech in self.tech_indicator_list), [])
                     + sum(([self.data[sent]] for sent in self.sentiment_list), [])
@@ -440,7 +446,7 @@ class StockTradingEnv(gym.Env):
                 # for multiple stock
                 state = (
                     [self.previous_state[0]]
-                    + self.data.close.values.tolist()
+                    + self.data.change.values.tolist()
                     + self.previous_state[
                         (self.stock_dim + 1) : (self.stock_dim * 2 + 1)
                     ]
@@ -463,7 +469,7 @@ class StockTradingEnv(gym.Env):
                 # for single stock
                 state = (
                     [self.previous_state[0]]
-                    + [self.data.close]
+                    + [self.data.change]
                     + self.previous_state[
                         (self.stock_dim + 1) : (self.stock_dim * 2 + 1)
                     ]
@@ -477,7 +483,7 @@ class StockTradingEnv(gym.Env):
             # for multiple stock
             state = (
                 [self.state[0]]
-                + self.data.close.values.tolist()
+                + self.data.change.values.tolist()
                 + list(self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)])
                 + sum(
                     (
@@ -499,7 +505,7 @@ class StockTradingEnv(gym.Env):
             # for single stock
             state = (
                 [self.state[0]]
-                + [self.data.close]
+                + [self.data.change]
                 + list(self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)])
                 + sum(([self.data[tech]] for tech in self.tech_indicator_list), [])
                 + sum(([self.data[sent]] for sent in self.sentiment_list), [])
