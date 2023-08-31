@@ -35,7 +35,7 @@ class StockTradingEnv(gym.Env):
         action_space: int,
         tech_indicator_list: list[str],
         sentiment_list: list[str],
-        price: list[float], #datenformat vom price anpassen falls nötig
+        # price: list[float], #datenformat vom price anpassen falls nötig
         turbulence_threshold=None,
         risk_indicator_col="turbulence",
         make_plots: bool = False,
@@ -50,7 +50,7 @@ class StockTradingEnv(gym.Env):
 
 
     ):
-        self.price = self.data.close.values.tolist()
+
         self.day = day
         self.df = df
         self.stock_dim = stock_dim
@@ -69,6 +69,7 @@ class StockTradingEnv(gym.Env):
             low=-np.inf, high=np.inf, shape=(self.state_space,)
         )
         self.data = self.df.loc[self.day, :]
+        self.price = self.data.close.values.tolist()
         self.terminal = False
         self.make_plots = make_plots
         self.print_verbosity = print_verbosity
