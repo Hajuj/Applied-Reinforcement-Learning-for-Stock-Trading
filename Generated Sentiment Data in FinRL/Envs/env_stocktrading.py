@@ -424,6 +424,8 @@ class StockTradingEnv(gym.Env):
                     ),
                     [],
                 )
+                    + self.data.change.values.tolist()
+                    + self.data.volume.values.tolist()
                 )  # append initial stocks_share to initial state, instead of all zero
             else:
                 # for single stock
@@ -433,6 +435,8 @@ class StockTradingEnv(gym.Env):
                     + [0] * self.stock_dim
                     + sum(([self.data[tech]] for tech in self.tech_indicator_list), [])
                     + sum(([self.data[sent]] for sent in self.sentiment_list), [])
+                    + [self.data.change]
+                    + [self.data.volume]
                 )
         else:
             # Using Previous State
@@ -458,6 +462,8 @@ class StockTradingEnv(gym.Env):
                     ),
                     [],
                 )
+                    + self.data.change.values.tolist()
+                    + self.data.volume.values.tolist()
                 )
             else:
                 # for single stock
@@ -469,6 +475,8 @@ class StockTradingEnv(gym.Env):
                     ]
                     + sum(([self.data[tech]] for tech in self.tech_indicator_list), [])
                     + sum(([self.data[sent]] for sent in self.sentiment_list), [])
+                    + [self.data.change]
+                    + [self.data.volume]
                 )
         return state
 
@@ -493,6 +501,8 @@ class StockTradingEnv(gym.Env):
                 ),
                 [],
             )
+                + self.data.change.values.tolist()
+                +self.data.volume.values.tolist()
             )
 
         else:
@@ -503,6 +513,8 @@ class StockTradingEnv(gym.Env):
                 + list(self.state[(self.stock_dim + 1) : (self.stock_dim * 2 + 1)])
                 + sum(([self.data[tech]] for tech in self.tech_indicator_list), [])
                 + sum(([self.data[sent]] for sent in self.sentiment_list), [])
+                + [self.data.change]
+                + [self.data.volume]
             )
 
         return state
