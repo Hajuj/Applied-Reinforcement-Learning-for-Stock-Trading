@@ -426,6 +426,7 @@ class StockTradingEnv(gym.Env):
                 )
                     + self.data.change.values.tolist()
                     + self.data.volume.values.tolist()
+
                 )  # append initial stocks_share to initial state, instead of all zero
             else:
                 # for single stock
@@ -437,6 +438,7 @@ class StockTradingEnv(gym.Env):
                     + sum(([self.data[sent]] for sent in self.sentiment_list), [])
                     + [self.data.change]
                     + [self.data.volume]
+
                 )
         else:
             # Using Previous State
@@ -464,6 +466,7 @@ class StockTradingEnv(gym.Env):
                 )
                     + self.data.change.values.tolist()
                     + self.data.volume.values.tolist()
+
                 )
             else:
                 # for single stock
@@ -477,6 +480,7 @@ class StockTradingEnv(gym.Env):
                     + sum(([self.data[sent]] for sent in self.sentiment_list), [])
                     + [self.data.change]
                     + [self.data.volume]
+
                 )
         return state
 
@@ -502,7 +506,8 @@ class StockTradingEnv(gym.Env):
                 [],
             )
                 + self.data.change.values.tolist()
-                +self.data.volume.values.tolist()
+                + self.data.volume.values.tolist()
+
             )
 
         else:
@@ -515,6 +520,7 @@ class StockTradingEnv(gym.Env):
                 + sum(([self.data[sent]] for sent in self.sentiment_list), [])
                 + [self.data.change]
                 + [self.data.volume]
+
             )
 
         return state
