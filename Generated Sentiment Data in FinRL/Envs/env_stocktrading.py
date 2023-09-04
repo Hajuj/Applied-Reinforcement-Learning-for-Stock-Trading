@@ -35,6 +35,7 @@ class StockTradingEnv(gym.Env):
         action_space: int,
         tech_indicator_list: list[str],
         sentiment_list: list[str],
+        seed: int=None,
         turbulence_threshold=None,
         risk_indicator_col="turbulence",
         make_plots: bool = False,
@@ -45,6 +46,7 @@ class StockTradingEnv(gym.Env):
         model_name="",
         mode="",
         iteration="",
+
     ):
         self.day = day
         self.df = df
@@ -99,7 +101,8 @@ class StockTradingEnv(gym.Env):
         self.date_memory = [self._get_date()]
         #         self.logger = Logger('results',[CSVOutputFormat])
         # self.reset()
-        self._seed()
+        self._seed(seed)
+
 
     def _sell_stock(self, index, action):
         def _do_sell_normal():
@@ -590,9 +593,15 @@ class StockTradingEnv(gym.Env):
             df_actions = pd.DataFrame({"date": date_list, "actions": action_list})
         return df_actions
 
-    def _seed(self, seed=None):
-        self.np_random, seed = seeding.np_random(seed)
-        return [seed]
+    def _seed(self, seed):
+        """self.np_random, seed = seeding.np_random(seed)
+        return [seed]"""
+        # Zuerst überprüfen, ob ein Seed-Wert in den kwargs übergeben wurde
+        if seed is not None:
+            self.np_random, seed = seeding.np_random(seed)
+
+        # Speichere den Seed-Wert als Attribut, falls du ihn später benötigst
+        self.seed = seed
 
     def get_sb_env(self):
         e = DummyVecEnv([lambda: self])
