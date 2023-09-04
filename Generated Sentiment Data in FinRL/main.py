@@ -24,13 +24,13 @@ def prep(train):
 def main():
     # Change these parameters
     # Set the corresponding values to 'True' for the algorithms that you want to use
-    if_using_a2c = True
+    if_using_a2c = False
     if_using_ddpg = False
-    if_using_ppo = False
+    if_using_ppo = True
     if_using_td3 = False
     if_using_sac = False
     # Write seed here:
-    seed = 0
+    seed = 1
 
 
     # Do not change (except for agent parameters)
