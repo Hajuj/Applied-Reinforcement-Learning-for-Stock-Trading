@@ -8,7 +8,7 @@ The primary focus of our project is to develop an intelligent agent that leverag
 
 For more information on the project please visit our [**Wiki**](https://gitlab.lrz.de/team-1-ARL/automatic-stock-trading-applied-reinforcement-learning-sommer-term-2023/-/wikis/home)
 
-## Datasets and APIs
+## Datasets and APIs 
 
 To facilitate our research and development process, we will utilize the following datasets and APIs:
 
