@@ -36,6 +36,7 @@ class StockTradingEnv(gym.Env):
         tech_indicator_list: list[str],
         sentiment_list: list[str],
         seed: int=None,
+        hourly: bool=False,
         turbulence_threshold=None,
         risk_indicator_col="turbulence",
         make_plots: bool = False,
@@ -102,6 +103,7 @@ class StockTradingEnv(gym.Env):
         #         self.logger = Logger('results',[CSVOutputFormat])
         # self.reset()
         self._seed(seed)
+        self.hourly = hourly
 
 
     def _sell_stock(self, index, action):
@@ -249,8 +251,13 @@ class StockTradingEnv(gym.Env):
                 1
             )
             if df_total_value["daily_return"].std() != 0:
+                if self.hourly:
+                    timesteps = 252*7
+                else:
+                    timesteps = 252
+
                 sharpe = (
-                    (252**0.5)
+                    (timesteps**0.5)
                     * df_total_value["daily_return"].mean()
                     / df_total_value["daily_return"].std()
                 )
