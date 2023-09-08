@@ -1,0 +1,2 @@
+Wir haben Turbulence mit start = 20 erzeugt 
+VIX is von VIXY gemacht
