@@ -85,7 +85,7 @@ def main():
 
     hourly = True
     sentiment = True
-    smoothed = False
+    smoothed = True
 
     for seed in range(3):
 
