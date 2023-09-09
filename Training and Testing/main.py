@@ -134,7 +134,7 @@ def main():
 
         if if_using_a2c:
             # set up logger
-            tmp_path = log_path + '/a2c'
+            tmp_path = log_path + f'/a2c/seed{seed}'
             new_logger_a2c = configure(tmp_path, ["stdout", "csv", "tensorboard"])
             # Set new logger
             model_a2c.set_logger(new_logger_a2c)
@@ -152,7 +152,7 @@ def main():
 
         if if_using_ddpg:
             # set up logger
-            tmp_path = log_path + '/ddpg'
+            tmp_path = log_path + f'/ddpg/seed{seed}'
             new_logger_ddpg = configure(tmp_path, ["stdout", "csv", "tensorboard"])
             # Set new logger
             model_ddpg.set_logger(new_logger_ddpg)
@@ -176,7 +176,7 @@ def main():
 
         if if_using_ppo:
             # set up logger
-            tmp_path = log_path + '/ppo'
+            tmp_path = log_path + f'/ppo/seed{seed}'
             new_logger_ppo = configure(tmp_path, ["stdout", "csv", "tensorboard"])
             # Set new logger
             model_ppo.set_logger(new_logger_ppo)
@@ -197,7 +197,7 @@ def main():
 
         if if_using_td3:
             # set up logger
-            tmp_path = log_path + '/td3'
+            tmp_path = log_path + f'/td3/seed{seed}'
             new_logger_td3 = configure(tmp_path, ["stdout", "csv", "tensorboard"])
             # Set new logger
             model_td3.set_logger(new_logger_td3)
@@ -224,7 +224,7 @@ def main():
 
         if if_using_sac:
             # set up logger
-            tmp_path = RESULTS_DIR + '/sac'
+            tmp_path = log_path + f'/sac/seed{seed}'
             new_logger_sac = configure(tmp_path, ["stdout", "csv", "tensorboard"])
             # Set new logger
             model_sac.set_logger(new_logger_sac)
