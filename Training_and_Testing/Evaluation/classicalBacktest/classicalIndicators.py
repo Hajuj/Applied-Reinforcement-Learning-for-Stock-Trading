@@ -47,11 +47,12 @@ def main():
     sentiment = True
     normalized = True
 
-
+    #Ging noch nicht, um Pfad noch kümmern
     #path, save = directory(hourly, sentiment, smoothed, normalized)
     path = '/Users/lolo/PycharmProjects/automatic-stock-trading-applied-reinforcement-learning-sommer-term-2023/' \
            'Training_and_Testing/Evaluation/data_testing/hourly/hourly_smoothed_testing_data.csv'
     train = pd.read_csv(path)
+    indicators = train.copy()
     capital = 1000000
 
     arr = []
@@ -152,7 +153,19 @@ def main():
     rsi_df = rsi*capital
     bollinger_df = bollinger*capital
 
-    # ToDo: In Dataframe bringen, s.d. es das gleiche Format hat wie die RL Agenten
+    # In Dataframe bringen, s.d. es das gleiche Format hat wie die RL Agenten (funktioniert noch nicht, da falsche Länge)
+    print(indicators)
+    columns = indicators.columns.tolist()
+    columns.remove('date')
+
+    indicators.drop(columns,axis=1, inplace=True)
+
+    indicators['buy and hold'] = buyandhold_df
+    indicators['macd'] = macd_df
+    indicators['rsi'] = rsi_df
+    indicators['bollinger bands'] = bollinger_df
+
+    print(indicators)
 
 
 
