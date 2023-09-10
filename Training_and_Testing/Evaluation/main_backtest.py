@@ -34,20 +34,25 @@ def directory(hourly, sentiment, smoothed, normalized):
                              'random']
                 if normalized:
                     model_path = 'model/hourly/smoothedSentimentNorm'
+                    save = 'results_data/comparison'
                 else:
                     model_path = 'model/hourly/smoothedSentiment'
+                    save = 'results_data/hourly/smoothed/Sentiment'
             else:
                 model_path = 'model/hourly/smoothedNoSentiment'
+                save = 'results_data/hourly/smoothed/noSentiment'
                 SENTIMENT = ['random']
         else:
             path = 'data_testing/hourly/hourly_testing_data.csv'
             turbulence_threshold = 700
             if sentiment:
                 model_path = 'model/hourly/Sentiment'
+                save = 'results_data/hourly/notSmoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
             else:
                 model_path = 'model/hourly/noSentiment'
+                save = 'results_data/hourly/notSmoothed/noSentiment'
                 SENTIMENT = ['random']
 
 
@@ -57,29 +62,33 @@ def directory(hourly, sentiment, smoothed, normalized):
             turbulence_threshold = 90
             if sentiment:
                 model_path = 'model/daily/smoothedSentiment'
+                save = 'results_data/daily/Smoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
             else:
                 model_path = 'model/daily/Sentiment'
+                save = 'results_data/daily/Smoothed/noSentiment'
                 SENTIMENT = ['random']
         else:
             path = 'data_testing/daily/daily_testing_data.csv'
             turbulence_threshold = 80
             if sentiment:
                 model_path = 'model/daily/Sentiment'
+                save = 'results_data/daily/notSmoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
             else:
                 model_path = 'model/daily/noSentiment'
+                save = 'results_data/daily/notSmoothed/noSentiment'
                 SENTIMENT = ['random']
-    return path, model_path, SENTIMENT, turbulence_threshold
+    return path, model_path, SENTIMENT, turbulence_threshold, save
 
 def main():
     # change the parameters according to the model to be tested
     hourly = True
     sentiment = True
     smoothed = True
-    normalized = False
+    normalized = True
 
     if_using_a2c = True
     if_using_ddpg = True
@@ -91,7 +100,7 @@ def main():
         INDICATORS.append('vix')"""
 
 
-    path, model_path, SENTIMENT, turbulence_threshold = directory(hourly, sentiment, smoothed, normalized)
+    path, model_path, SENTIMENT, turbulence_threshold, save = directory(hourly, sentiment, smoothed, normalized)
 
     trade = pd.read_csv(path)
     trade = prep(trade)
@@ -206,8 +215,8 @@ def main():
         else:
             agent = ''
 
-        #result.to_csv(f"result{agent}{seed}.csv")
-        result.to_csv(f"results_data/comparison/result{seed}_norm{normalized}.csv")
+        #result.to_csv(f"{save}/result{seed}.csv")
+        result.to_csv(f"{save}/result{seed}_norm{normalized}.csv")
 
 
 
