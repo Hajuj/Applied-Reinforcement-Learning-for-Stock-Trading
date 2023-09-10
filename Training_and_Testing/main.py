@@ -73,13 +73,20 @@ def prep(train):
     # Set the new index for the DataFrame
     train.set_index('index', inplace=True, drop=True)
     train = train.fillna(0)
+    train = train.sort_values(['date', 'tic'], ascending=[True, True])
     return train
 def normalize_data(train):
+    interm = train['close']
+
+
     df_num = train.select_dtypes(include='number')
     df_norm = (df_num - df_num.min()) / (df_num.max() - df_num.min()) * 200 + 20
 
     train[df_norm.columns] = df_norm
+    train['close'] = interm
     return train
+
+
 def main():
     # Change these parameters
     # Set the corresponding values to 'True' for the algorithms that you want to use
