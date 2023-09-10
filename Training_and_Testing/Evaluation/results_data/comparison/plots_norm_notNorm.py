@@ -7,9 +7,9 @@ a2c = pd.concat(
     map(
         pd.read_csv,
         [
-            "resulta2c0_normFalse.csv",
-            "resulta2c1_normFalse.csv",
-            "resulta2c2_normFalse.csv",
+            "result0_normFalse.csv",
+            "result1_normFalse.csv",
+            "result2_normFalse.csv",
 
         ],
     ),
@@ -25,9 +25,9 @@ ddpg = pd.concat(
     map(
         pd.read_csv,
         [
-            "resultddpg0_normFalse.csv",
-            "resultddpg1_normFalse.csv",
-            "resultddpg2_normFalse.csv",
+            "result0_normFalse.csv",
+            "result1_normFalse.csv",
+            "result2_normFalse.csv",
 
         ],
     ),
@@ -43,9 +43,9 @@ ppo = pd.concat(
     map(
         pd.read_csv,
         [
-            "resultppo0_normFalse.csv",
-            "resultppo1_normFalse.csv",
-            "resultppo2_normFalse.csv",
+            "result0_normFalse.csv",
+            "result1_normFalse.csv",
+            "result2_normFalse.csv",
 
         ],
     ),
@@ -61,8 +61,8 @@ td3 = pd.concat(
     map(
         pd.read_csv,
         [
-            "resulttd30_normFalse.csv",
-            "resulttd31_normFalse.csv",
+            "result30_normFalse.csv",
+            "result1_normFalse.csv",
             "resulttd32_normFalse.csv",
 
         ],
