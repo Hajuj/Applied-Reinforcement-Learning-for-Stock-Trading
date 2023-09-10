@@ -10,7 +10,7 @@ from Envs.env_stocktrading import StockTradingEnv
 def directory(hourly, sentiment, smoothed):
     if hourly:
         if smoothed:
-            path = 'Data/Hourly/hourly_smoothed_training_data.csv'
+            path = r"C:\Users\potap\OneDrive\Desktop\hourly\hourly_smoothed_training_data.csv"#'Data/Hourly/hourly_smoothed_training_data.csv'
             turbulence_threshold = 1000
             if sentiment:
                 model_path = 'Evaluation/model/hourly/smoothedSentimentNorm'
@@ -75,10 +75,9 @@ def prep(train):
     train = train.fillna(0)
     train = train.sort_values(['date', 'tic'], ascending=[True, True])
     return train
+
 def normalize_data(train):
     interm = train['close']
-
-
     df_num = train.select_dtypes(include='number')
     df_norm = (df_num - df_num.min()) / (df_num.max() - df_num.min()) * 200 + 20
 
@@ -94,7 +93,7 @@ def main():
     if_using_ddpg = False
     if_using_ppo = False
     if_using_td3 = False
-    if_using_sac = False
+    if_using_sac = True
 
     hourly = True
     sentiment = True
@@ -156,7 +155,7 @@ def main():
 
         trained_a2c = agent.train_model(model=model_a2c,
                                         tb_log_name='a2c',
-                                        total_timesteps=200000) if if_using_a2c else None
+                                        total_timesteps=50000) if if_using_a2c else None
 
         trained_a2c.save(model_path + f"/a2c/seed{seed}") if if_using_a2c else None
 
@@ -198,7 +197,7 @@ def main():
 
         trained_ppo = agent.train_model(model=model_ppo,
                                         tb_log_name='ppo',
-                                        total_timesteps=200000) if if_using_ppo else None
+                                        total_timesteps=50000) if if_using_ppo else None
 
         trained_ppo.save(model_path + f"/ppo/seed{seed}") if if_using_ppo else None
 
@@ -246,7 +245,7 @@ def main():
 
         trained_sac = agent.train_model(model=model_sac,
                                         tb_log_name='sac',
-                                        total_timesteps=200000) if if_using_sac else None
+                                        total_timesteps=50000) if if_using_sac else None
 
         trained_sac.save(model_path + f"/sac/seed{seed}") if if_using_sac else None
 
