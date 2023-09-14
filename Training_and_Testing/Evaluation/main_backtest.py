@@ -36,22 +36,22 @@ def directory(hourly, sentiment, smoothed, normalized):
                     model_path = 'model/hourly/smoothedSentimentNorm'
                     save = 'results_data/comparison'
                 else:
-                    model_path = 'model/hourly/smoothedSentiment'
+                    model_path = 'model/hourly/notNormalized/smoothedSentiment'
                     save = 'results_data/hourly/smoothed/Sentiment'
             else:
-                model_path = 'model/hourly/smoothedNoSentiment'
+                model_path = 'model/hourly/notNormalized/smoothedNoSentiment'
                 save = 'results_data/hourly/smoothed/noSentiment'
                 SENTIMENT = ['random']
         else:
             path = 'data_testing/hourly/hourly_testing_data.csv'
             turbulence_threshold = 700
             if sentiment:
-                model_path = 'model/hourly/Sentiment'
+                model_path = 'model/hourly/notNormalized/Sentiment'
                 save = 'results_data/hourly/notSmoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
             else:
-                model_path = 'model/hourly/noSentiment'
+                model_path = 'model/hourly/notNormalized/noSentiment'
                 save = 'results_data/hourly/notSmoothed/noSentiment'
                 SENTIMENT = ['random']
 
