@@ -128,16 +128,16 @@ def normalize_data(train):
 def main():
     # change the parameters according to the model to be tested
     hourly = True
-    sentiment = False
+    sentiment = True
     threshold_flag = True
-    smoothed = False
+    smoothed = True
     normalized = True
     transaction_cost = 0.01
 
     if_using_a2c = True
-    if_using_ddpg = False
+    if_using_ddpg = True
     if_using_ppo = True
-    if_using_td3 = False
+    if_using_td3 = True
     if_using_sac = True
 
 
