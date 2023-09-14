@@ -33,62 +33,106 @@ def directory(hourly, sentiment, smoothed, normalized):
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
                 if normalized:
-                    model_path = 'model/hourly/smoothedSentimentNorm'
-                    save = 'results_data/comparison'
+                    model_path = 'model/hourly/normalized/smoothedSentiment'
+                    save_path = "results_data/hourly/normalized/smoothedSentiment"
                 else:
                     model_path = 'model/hourly/notNormalized/smoothedSentiment'
-                    save = 'results_data/hourly/smoothed/Sentiment'
+                    save_path = 'results_data/hourly/notNormalized/smoothedSentiment'
+
             else:
-                model_path = 'model/hourly/notNormalized/smoothedNoSentiment'
-                save = 'results_data/hourly/smoothed/noSentiment'
                 SENTIMENT = ['random']
+                if normalized:
+                    model_path = 'model/hourly/normalized/smoothedNoSentiment'
+                    save_path = 'results_data/hourly/normalized/smoothedNoSentiment'
+                else:
+                    model_path = 'model/hourly/notNormalized/smoothedNoSentiment'
+                    save_path = 'results_data/hourly/notNormalized/smoothedNoSentiment'
+
         else:
-            path = 'data_testing/hourly/hourly_testing_data.csv'
+            path = 'Data/Hourly/hourly_training_data.csv'
             turbulence_threshold = 700
             if sentiment:
-                model_path = 'model/hourly/notNormalized/Sentiment'
-                save = 'results_data/hourly/notSmoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
-            else:
-                model_path = 'model/hourly/notNormalized/noSentiment'
-                save = 'results_data/hourly/notSmoothed/noSentiment'
-                SENTIMENT = ['random']
+                if normalized:
+                    model_path = 'model/hourly/normalized/Sentiment'
+                    save_path = 'results_data/hourly/normalized/Sentiment'
+                else:
+                    model_path = 'model/hourly/notNormalized/Sentiment'
+                    save_path = 'results_data/hourly/notNormalized/Sentiment'
 
+            else:
+                SENTIMENT = ['random']
+                if normalized:
+                    model_path = 'model/hourly/normalized/noSentiment'
+                    save_path = 'results_data/hourly/normalized/noSentiment'
+                else:
+                    model_path = 'model/hourly/notNormalized/noSentiment'
+                    save_path = 'results_data/hourly/notNormalized/noSentiment'
 
     else:
         if smoothed:
-            path = 'data_testing/daily/daily_smoothed_testing_data.csv'
+            path = 'Data/Daily/daily_smoothed_training_data.csv'
             turbulence_threshold = 90
             if sentiment:
-                model_path = 'model/daily/smoothedSentiment'
-                save = 'results_data/daily/Smoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
+                if normalized:
+                    model_path = 'model/daily/normalized/smoothedSentiment'
+                    save_path = 'results_data/daily/normalized/smoothedSentiment'
+                else:
+                    model_path = 'model/daily/notNormalized/smoothedSentiment'
+                    save_path = 'results_data/daily/notNormalized/smoothedSentiment'
+
             else:
-                model_path = 'model/daily/Sentiment'
-                save = 'results_data/daily/Smoothed/noSentiment'
                 SENTIMENT = ['random']
+                if normalized:
+                    model_path = 'model/daily/normalized/smoothedNoSentiment'
+                    save_path = 'results_data/daily/normalized/smoothedNoSentiment'
+                else:
+                    model_path = 'model/daily/notNormalized/smoothedNoSentiment'
+                    save_path = 'results_data/daily/notNormalized/smoothedNoSentiment'
         else:
-            path = 'data_testing/daily/daily_testing_data.csv'
+            path = 'Data/Daily/daily_training_data.csv'
             turbulence_threshold = 80
             if sentiment:
-                model_path = 'model/daily/Sentiment'
-                save = 'results_data/daily/notSmoothed/Sentiment'
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
                              'random']
+                if normalized:
+                    model_path = 'model/daily/normalized/Sentiment'
+                    save_path = 'results_data/daily/normalized/Sentiment'
+                else:
+                    model_path = 'model/daily/notNormalized/Sentiment'
+                    save_path = 'results_data/daily/notNormalized/Sentiment'
+
             else:
-                model_path = 'model/daily/noSentiment'
-                save = 'results_data/daily/notSmoothed/noSentiment'
                 SENTIMENT = ['random']
-    return path, model_path, SENTIMENT, turbulence_threshold, save
+                if normalized:
+                    model_path = 'model/daily/normalized/noSentiment'
+                    save_path = 'results_data/daily/normalized/noSentiment'
+                else:
+                    model_path = 'model/daily/notNormalized/noSentiment'
+                    save_path = 'results_data/daily/notNormalized/noSentiment'
+    return path, model_path, SENTIMENT, turbulence_threshold, save_path
+
+def normalize_data(train):
+    interm = train['close']
+
+    df_num = train.select_dtypes(include='number')
+    df_norm = (df_num - df_num.min()) / (df_num.max() - df_num.min()) * 200 + 20
+
+    train[df_norm.columns] = df_norm
+    train['close'] = interm
+    return train
 
 def main():
     # change the parameters according to the model to be tested
     hourly = True
-    sentiment = True
+    sentiment = False
+    threshold_flag = True
     smoothed = True
     normalized = True
+    transaction_cost = 0.001
 
     if_using_a2c = True
     if_using_ddpg = True
@@ -96,8 +140,7 @@ def main():
     if_using_td3 = True
     if_using_sac = True
 
-    """if 'vix' not in INDICATORS:
-        INDICATORS.append('vix')"""
+
 
 
     path, model_path, SENTIMENT, turbulence_threshold, save = directory(hourly, sentiment, smoothed, normalized)
@@ -105,14 +148,29 @@ def main():
     trade = pd.read_csv(path)
     trade = prep(trade)
 
+    if normalized:
+        trade = normalize_data(trade)
 
-    for seed in range(0,3):
+    if 'vix' not in INDICATORS:
         INDICATORS.append('vix')
+    print(INDICATORS)
 
-        if normalized:
-            model_name = f"seed_{seed}"
-        else:
-            model_name = f"seed{seed}"
+    if threshold_flag:
+        model_path = model_path + '/threshold'
+        save = save + '/threshold'
+    else:
+        model_path = model_path + '/noThreshold'
+        save = save + '/noThreshold'
+
+    if transaction_cost == 0.001:
+        model_path = model_path + '/lowCost'
+        save = save + '/lowCost'
+
+    print(model_path)
+
+    for seed in range(0, 3):
+
+        model_name = f"seed{seed}"
 
 
         trained_a2c = A2C.load(model_path + f"/a2c/{model_name}") if if_using_a2c else None
@@ -125,7 +183,7 @@ def main():
         state_space = 1 + 4 * stock_dimension + len(INDICATORS) * stock_dimension + len(SENTIMENT) * stock_dimension
         print(f'State Space: {state_space}, Stock Dimension: {stock_dimension}')
 
-        buy_cost_list = sell_cost_list = [0.01] * stock_dimension
+        buy_cost_list = sell_cost_list = [transaction_cost] * stock_dimension
         num_stock_shares = [0] * stock_dimension
 
         env_kwargs = {
@@ -143,7 +201,10 @@ def main():
             "seed": seed,
             "hourly": hourly,
         }
-        e_trade_gym = StockTradingEnv(df=trade, turbulence_threshold=turbulence_threshold, risk_indicator_col='vix', **env_kwargs)
+        if threshold_flag:
+            e_trade_gym = StockTradingEnv(df=trade, turbulence_threshold=turbulence_threshold, **env_kwargs)
+        else:
+            e_trade_gym = StockTradingEnv(df=trade, **env_kwargs)
         print(INDICATORS)
         print(SENTIMENT)
         df_account_value_a2c, df_actions_a2c = DRLAgent.DRL_prediction(
@@ -202,21 +263,10 @@ def main():
             }
         )
 
-        if if_using_a2c:
-            agent='a2c'
-        elif if_using_ddpg:
-            agent = 'ddpg'
-        elif if_using_ppo:
-            agent = 'ppo'
-        elif if_using_td3:
-            agent = 'td3'
-        elif if_using_sac:
-            agent = 'sac'
-        else:
-            agent = ''
 
-        #result.to_csv(f"{save}/result{seed}.csv")
-        result.to_csv(f"{save}/result{seed}_norm{normalized}.csv")
+
+        result.to_csv(f"{save}/result{seed}.csv")
+        #result.to_csv(f"{save}/result{seed}_norm{normalized}.csv")
 
 
 

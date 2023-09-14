@@ -133,9 +133,9 @@ def main():
     hourly = True
     sentiment = False
     threshold_flag = True
-    smoothed = False
+    smoothed = True
     normalized = True
-    transaction_cost = 0.01
+    transaction_cost = 0.001
 
     # Do not change (except for agent parameters)
     path, model_path, log_path, SENTIMENT, turbulence_threshold = directory(hourly, sentiment, smoothed, normalized)
@@ -155,6 +155,11 @@ def main():
     else:
         model_path = model_path + '/noThreshold'
         log_path = log_path + '/noThreshold'
+
+    if transaction_cost == 0.001:
+        model_path = model_path + '/lowCost'
+        log_path = log_path + '/lowCost'
+
     print(model_path)
 
 
