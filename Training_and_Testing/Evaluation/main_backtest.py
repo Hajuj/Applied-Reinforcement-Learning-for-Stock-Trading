@@ -49,7 +49,7 @@ def directory(hourly, sentiment, smoothed, normalized):
                     save_path = 'results_data/hourly/notNormalized/smoothedNoSentiment'
 
         else:
-            path = 'Data/Hourly/hourly_training_data.csv'
+            path = 'data_testing/hourly/hourly_testing_data.csv'
             turbulence_threshold = 700
             if sentiment:
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
@@ -72,7 +72,7 @@ def directory(hourly, sentiment, smoothed, normalized):
 
     else:
         if smoothed:
-            path = 'Data/Daily/daily_smoothed_training_data.csv'
+            path = 'data_testing/daily/daily_smoothed_testing_data.csv'
             turbulence_threshold = 90
             if sentiment:
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
@@ -93,7 +93,7 @@ def directory(hourly, sentiment, smoothed, normalized):
                     model_path = 'model/daily/notNormalized/smoothedNoSentiment'
                     save_path = 'results_data/daily/notNormalized/smoothedNoSentiment'
         else:
-            path = 'Data/Daily/daily_training_data.csv'
+            path = 'data_testing/daily/daily_testing_data.csv'
             turbulence_threshold = 80
             if sentiment:
                 SENTIMENT = ['stocktwitsPosts', 'stocktwitsLikes', 'stocktwitsImpressions', 'stocktwitsSentiment',
@@ -130,14 +130,14 @@ def main():
     hourly = True
     sentiment = False
     threshold_flag = True
-    smoothed = True
+    smoothed = False
     normalized = True
-    transaction_cost = 0.001
+    transaction_cost = 0.01
 
     if_using_a2c = True
-    if_using_ddpg = True
+    if_using_ddpg = False
     if_using_ppo = True
-    if_using_td3 = True
+    if_using_td3 = False
     if_using_sac = True
 
 
@@ -153,7 +153,7 @@ def main():
 
     if 'vix' not in INDICATORS:
         INDICATORS.append('vix')
-    print(INDICATORS)
+
 
     if threshold_flag:
         model_path = model_path + '/threshold'
@@ -166,7 +166,7 @@ def main():
         model_path = model_path + '/lowCost'
         save = save + '/lowCost'
 
-    print(model_path)
+    print(f'model path: {model_path}, save path: {save}')
 
     for seed in range(0, 3):
 
