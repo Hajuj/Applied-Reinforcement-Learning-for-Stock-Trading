@@ -125,17 +125,17 @@ def main():
     # Change these parameters
     # Set the corresponding values to 'True' for the algorithms that you want to use
     if_using_a2c = True
-    if_using_ddpg = False
+    if_using_ddpg = True
     if_using_ppo = True
-    if_using_td3 = False
+    if_using_td3 = True
     if_using_sac = True
 
     hourly = True
-    sentiment = False
+    sentiment = True
     threshold_flag = True
     smoothed = True
     normalized = True
-    transaction_cost = 0.001
+    transaction_cost = 0.01
 
     # Do not change (except for agent parameters)
     path, model_path, log_path, SENTIMENT, turbulence_threshold = directory(hourly, sentiment, smoothed, normalized)
