@@ -23,6 +23,7 @@ def prep(train):
     # Set the new index for the DataFrame
     train.set_index('index', inplace=True, drop=True)
     train = train.fillna(0)
+    train = train.sort_values(['date', 'tic'], ascending=[True, True])
     return train
 def directory(hourly, sentiment, smoothed, normalized):
     if hourly:
