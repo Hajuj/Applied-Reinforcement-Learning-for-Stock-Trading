@@ -5,15 +5,21 @@ import numpy as np
 
 
 def main():
-    comparison = 'normalized'
-    agent = 'ppo_a2c'
-    # result1 = pd.read_csv('sac_combined_normalized.csv')
-    # result2 = pd.read_csv('sac_combined_notNormalized.csv')
-    result3 = pd.read_csv('ppo_combined_normalized.csv')
-    result4 = pd.read_csv('ppo_combined_notNormalized.csv')
-    result5 = pd.read_csv('a2c_combined_normalized.csv')
-    result6 = pd.read_csv('a2c_combined_notNormalized.csv')
-    results = pd.concat([result3, result4, result5, result6], ignore_index=True)
+    comparison = 'hourlySentimentTechnical'
+    agent = 'a2c_ddpg_buy_hold'
+    result1 = pd.read_csv('a2c_combined_hourlySentiment.csv')
+    # result2 = pd.read_csv('a2c_combined_hourlyNoSentiment.csv')
+    # result3 = pd.read_csv('ppo_combined_hourlySentiment.csv')
+    # result4 = pd.read_csv('ppo_combined_hourlyNoSentiment.csv')
+    # result5 = pd.read_csv('sac_combined_hourlySentiment.csv')
+    # result6 = pd.read_csv('sac_combined_hourlyNoSentiment.csv')
+    # result7 = pd.read_csv('td3_combined_hourlySentiment.csv')
+    # result8 = pd.read_csv('td3_combined_hourlyNoSentiment.csv')
+    result9 = pd.read_csv('ddpg_combined_hourlySentiment.csv')
+    # result10 = pd.read_csv('ddpg_combined_hourlyNoSentiment.csv')
+    result11 = pd.read_csv('technical_indicators_hourly.csv')
+    result_ind = result11.loc[result11["agent"] == "Buy_and_hold"]
+    results = pd.concat([result1, result9, result_ind], ignore_index=True)
 
     # Ermitteln Sie die Anzahl der Datenpunkte
     num_data_points = len(results)
@@ -62,6 +68,6 @@ def main():
     plt.legend(loc="upper left")
     plt.tight_layout()
     # plt.savefig(f"Compare_agent_performance_{comparison}_{agent}.pdf")
-    plt.savefig(f"Compare_agents_performance_{comparison}_{agent}.pdf")
+    plt.savefig(f"Compare_agent_performance_{comparison}_{agent}.pdf")
 
 main()

@@ -200,30 +200,34 @@ def directory(hourly, sentiment, smoothed, normalized, threshold, cost):
 
 def main():
     # Params
-    hourly = True
+    hourly = False
     sentiment = False
-    smoothed = True
-    normalized = False
+    smoothed = False
+    normalized = True
     threshold = True
     low_cost = False
 
     # comp = 'normalized'
-    comp = 'notNormalized'
+    # comp = 'notNormalized'
     # comp = 'smoothed'
     # comp = 'notSmoothed'
     # comp = 'threshold'
     # comp = 'noThreshold'
     # comp = 'lowCost'
     # comp = 'highCost'
+    # comp = 'hourlySentiment'
+    # comp = 'hourlyNoSentiment'
+    # comp = 'dailySentiment'
+    comp = 'dailyNoSentiment'
 
-    agent = 'sac'
+    agent = 'a2c'
 
     # agents
-    if_a2c = False
+    if_a2c = True
     if_ddpg = False
     if_ppo = False
     if_td3 = False
-    if_sac = True
+    if_sac = False
 
     path = directory(hourly, sentiment, smoothed, normalized, threshold, low_cost)
 
