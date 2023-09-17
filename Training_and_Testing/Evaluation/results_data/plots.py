@@ -304,5 +304,46 @@ def main():
     plt.tight_layout()
     plt.savefig("Agent_performance.pdf")"""
 
+    results = pd.read_csv(f"data_concat_{comp}_{agent}.csv")
+
+    ##########################
+    # global
+    plt.figure(figsize=(15, 6))
+    sns.set_style("white")
+    plt.grid(axis='y')
+
+    plt.rc("font", **{"family": "serif", "serif": ["Computer Modern"]})
+    plt.rc("text", usetex=False)
+
+    ##########################
+    # dedicated plot
+    sns.set(font_scale=1.4)
+    fig2 = sns.lineplot(
+        data=results,
+        x="date",
+        y="account value",
+        hue="agent",
+        palette="colorblind")
+    fig2.set(xticklabels=[])
+    fig2.tick_params(bottom=False)
+    fig2.set(xlabel="Date")
+    fig2.set(ylabel="Account Value")
+
+    ##########################
+    # ticks
+    data = pd.to_datetime(results["date"]).copy().dt.strftime('%d-%b-%Y')
+    # param to control spacing of labels
+    n_param = 50
+    for i in range(len(data)):
+        if (i + 1) % n_param:
+            data[i] = ""
+    plt.xticks(results.date, data.values, rotation=45)
+
+    ##########################
+    # dedicated plot
+    plt.legend(loc="upper left")
+    plt.tight_layout()
+    plt.savefig("Agent_performance_test_bla.pdf")
+
 
 main()
