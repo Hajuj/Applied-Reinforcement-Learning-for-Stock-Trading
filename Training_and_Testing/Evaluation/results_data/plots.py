@@ -203,12 +203,12 @@ def main():
     hourly = True
     sentiment = False
     smoothed = True
-    normalized = True
+    normalized = False
     threshold = True
     low_cost = False
 
-    comp = 'normalized'
-    # comp = 'notNormalized'
+    # comp = 'normalized'
+    comp = 'notNormalized'
     # comp = 'smoothed'
     # comp = 'notSmoothed'
     # comp = 'threshold'
@@ -320,7 +320,7 @@ def main():
     # dedicated plot
     plt.legend(loc="upper left")
     plt.tight_layout()
-    plt.savefig("Agent_performance.pdf")
+    plt.savefig(f"Agent_performance_{agent}_{comp}.pdf")
 
     # results = pd.read_csv(f"data_concat_{comp}_{agent}.csv")
 

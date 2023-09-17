@@ -2,15 +2,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-from matplotlib.ticker import MultipleLocator
 
 
 def main():
     comparison = 'normalized'
-    agent = 'sac'
-    result1 = pd.read_csv('sac_combined_normalized.csv')
-    result2 = pd.read_csv('sac_combined_notNormalized.csv')
-    results = pd.concat([result1, result2], ignore_index=True)
+    agent = 'ppo_a2c'
+    # result1 = pd.read_csv('sac_combined_normalized.csv')
+    # result2 = pd.read_csv('sac_combined_notNormalized.csv')
+    result3 = pd.read_csv('ppo_combined_normalized.csv')
+    result4 = pd.read_csv('ppo_combined_notNormalized.csv')
+    result5 = pd.read_csv('a2c_combined_normalized.csv')
+    result6 = pd.read_csv('a2c_combined_notNormalized.csv')
+    results = pd.concat([result3, result4, result5, result6], ignore_index=True)
 
     # Ermitteln Sie die Anzahl der Datenpunkte
     num_data_points = len(results)
@@ -58,6 +61,7 @@ def main():
     # dedicated plot
     plt.legend(loc="upper left")
     plt.tight_layout()
-    plt.savefig(f"Agent_performance_{comparison}_{agent}.pdf")
+    # plt.savefig(f"Compare_agent_performance_{comparison}_{agent}.pdf")
+    plt.savefig(f"Compare_agents_performance_{comparison}_{agent}.pdf")
 
 main()
