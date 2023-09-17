@@ -284,7 +284,7 @@ def main():
         dataframes,
         ignore_index=True
     )
-    results.to_csv(f"data_concat_{comp}_{agent}.csv")
+    # results.to_csv(f"data_concat_{comp}_{agent}.csv")
 
     """ sns.set(font_scale=1.4)
     sns.set_style("whitegrid")
@@ -304,7 +304,7 @@ def main():
     plt.tight_layout()
     plt.savefig("Agent_performance.pdf")"""
 
-    results = pd.read_csv(f"data_concat_{comp}_{agent}.csv")
+    # results = pd.read_csv(f"data_concat_{comp}_{agent}.csv")
 
     ##########################
     # global
