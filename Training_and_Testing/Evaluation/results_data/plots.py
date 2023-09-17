@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
 import pandas as pd
 
-def directory(hourly, sentiment, smoothed, normalized, threshold, cost ):
+
+def directory(hourly, sentiment, smoothed, normalized, threshold, cost):
     if hourly:
         if normalized:
             if smoothed:
@@ -197,8 +197,9 @@ def directory(hourly, sentiment, smoothed, normalized, threshold, cost ):
 
     return path
 
+
 def main():
-    #Params
+    # Params
     hourly = True
     sentiment = False
     smoothed = True
@@ -206,27 +207,25 @@ def main():
     threshold = True
     low_cost = False
 
-    #comp = 'normalized'
-    #comp = 'notNormalized'
-    #comp = 'smoothed'
-    #comp = 'notSmoothed'
-    #comp = 'threshold'
-    #comp = 'noThreshold'
-    #comp = 'lowCost'
-    comp = 'highCost'
+    comp = 'normalized'
+    # comp = 'notNormalized'
+    # comp = 'smoothed'
+    # comp = 'notSmoothed'
+    # comp = 'threshold'
+    # comp = 'noThreshold'
+    # comp = 'lowCost'
+    # comp = 'highCost'
 
     agent = 'sac'
 
-    #agents
+    # agents
     if_a2c = False
     if_ddpg = False
     if_ppo = False
     if_td3 = False
     if_sac = True
 
-
-
-    path = directory(hourly,sentiment, smoothed, normalized, threshold, low_cost)
+    path = directory(hourly, sentiment, smoothed, normalized, threshold, low_cost)
 
     df_RL = pd.concat(
         map(
@@ -278,35 +277,13 @@ def main():
         sac.to_csv(f"sac_combined_{comp}.csv")
         dataframes.append(sac)
 
-
-
+    # Plot
     results = pd.concat(
         dataframes,
         ignore_index=True
     )
     # results.to_csv(f"data_concat_{comp}_{agent}.csv")
 
-    """ sns.set(font_scale=1.4)
-    sns.set_style("whitegrid")
-    plt.figure(figsize=(25, 6))
-    plt.rc("font", **{"family": "serif", "serif": ["Computer Modern"]})
-    plt.rc("text", usetex=True)
-    fig2 = sns.lineplot(
-        data=results,
-        x="date",
-        y="account value",
-        hue="agent",
-        palette="colorblind",
-    )
-    # Anzahl der x-Achsenticks reduzieren, um nur jeden fünften zu beschriften
-    #plt.xticks(range(0, len(results), 20))
-    plt.legend(loc="upper left")
-    plt.tight_layout()
-    plt.savefig("Agent_performance.pdf")"""
-
-    # results = pd.read_csv(f"data_concat_{comp}_{agent}.csv")
-
-    ##########################
     # global
     plt.figure(figsize=(15, 6))
     sns.set_style("white")
@@ -315,7 +292,6 @@ def main():
     plt.rc("font", **{"family": "serif", "serif": ["Computer Modern"]})
     plt.rc("text", usetex=False)
 
-    ##########################
     # dedicated plot
     sns.set(font_scale=1.4)
     fig2 = sns.lineplot(
@@ -329,21 +305,23 @@ def main():
     fig2.set(xlabel="Date")
     fig2.set(ylabel="Account Value")
 
-    ##########################
     # ticks
     data = pd.to_datetime(results["date"]).copy().dt.strftime('%d-%b-%Y')
+
     # param to control spacing of labels
     n_param = 50
+
     for i in range(len(data)):
         if (i + 1) % n_param:
             data[i] = ""
+
     plt.xticks(results.date, data.values, rotation=45)
 
-    ##########################
     # dedicated plot
     plt.legend(loc="upper left")
     plt.tight_layout()
-    plt.savefig("Agent_performance_test_bla.pdf")
+    plt.savefig("Agent_performance.pdf")
 
+    # results = pd.read_csv(f"data_concat_{comp}_{agent}.csv")
 
 main()
