@@ -46,3 +46,48 @@ To further extend the scope of our project, we propose exploring complex derivat
 Feel free to reach out to any team member if you have any questions, suggestions, or collaboration opportunities related to this project.
 
 Let's embark on this exciting journey into the world of Reinforcement Learning for Stock Trading!
+
+## Code - Where to find the code for the steps in our pipeline
+
+The project requirements can be found in requirements.txt 
+
+### Data Generation and Pre-Processing
+
+To download the financial data use the Jupyter Notebook *Data_AlphaVantage* . It can be found in the folder named *Genereated Sentiment Data in FinRL*. 
+
+For downloading sentiment data and interpolating the missing data points use *Data_FMP* which can be found in *Generated Sentiment Data in FinRL* as well.
+
+The required code for smoothing the data can be found, too,  in the folder *Generated Sentiment Data in FinRL*. There it is written in the JUpyter Notebook *Data Preprocessing*.
+
+The last step to the finished dataset is adding a randomly generatedd number to each dataset and split the finished dataset into a training- and a testing-dataset. This is done using the Jupyter Notebook *Add_Random_to_dataframe_and_split_into_training_and_testing*.
+
+In the same directory the Jupyter Notebook *turbulenceTreshold* can be found. It contains a small piece of code for calculating the 0.8 percentile of the turbulence column of  a given dataset. This value is used to set the turbulence threshold for training and evaluation of the agents. 
+
+### Training
+The directory *Training_and_Testing* contains the directory *Envs* where the adapted Environment can be found. 
+
+To train the agent *main.py* is used. By setting the variables like hourly, smoothed, sentiment and the used agents to either True or False the right dataframe is loaded, the correct turbulence threshold (if used) is set and the paths for logging and saving the models is set. 
+
+The trained models can then be found in the directory *Evaluation/model* in the respective folder. 
+
+### Evaluation
+
+In the *Evaluation* directory the file *main_backtest* can be found. It is used for evaluating the trained models by testing them on the testing dataset. The results are saved as a csv-file and can be found in the *results_data* directory.
+There the file *plots.py* can be found. It is used to combine the different datasets gained from backtesting for the different seeds and prepare thmen in a way that can be used as input for generating plots.
+
+For the plots comparing only several agents the file *comparison plots* can be used. Depending on which feature and which agent is used for the comparison, the relevant line has to be commented in or out repectively. 
+
+The results of the classical trading strategies and the associated plots generated in the Jupyter Notebook *Plot_Jonas-TechIndi*. 
+
+### Sensitivity Analysis
+
+The code for the sensitivity analysis can be found in the directory *Training_and_Testing*. 
+
+there, the Notebook *Sensitivity_Analysis_hourly* is used for exporting the onnx model and transfering it to tensorflow and the calculation of the gradients. 
+
+The file *daily_sensitivity_PPO* is used for creating the sensitivity plots of the PPO agent trained on daily data.
+
+The plots for visualizing the other sensitivity results are created using the file *sensitivity_plots*.
+
+
+
